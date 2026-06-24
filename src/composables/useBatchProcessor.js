@@ -5,12 +5,12 @@ export function useBatchProcessor() {
   const { parseHtml, getTables, extractRecords } = useKrsParser()
   const { createWorkbook, workbookToBlob } = useExcelExporter()
 
-  async function processFile(file) {
+  async function processFile(file, tahunAkademik, semester) {
     const html = await file.text()
     const document = parseHtml(html)
     const tables = getTables(document)
 
-    const extractionResult = extractRecords(tables)
+    const extractionResult = extractRecords(tables, tahunAkademik, semester)
     const records = extractionResult.records
 
     const workbook = createWorkbook(records)

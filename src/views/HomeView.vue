@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import AppHeader from '@/components/AppHeader.vue'
@@ -8,12 +9,21 @@ import DownloadCard from '@/components/DownloadCard.vue'
 
 import { useProcessorStore } from '@/stores/processorStore'
 import { useDownload } from '@/composables/useDownload'
+
 import PreviewModal from '@/components/PreviewModal.vue'
+import AcademicSettingsModal from '@/components/AcademicSettingsModal.vue'
 
 const processorStore = useProcessorStore()
-const { processingFiles, completedFiles } = storeToRefs(processorStore)
 
 const { downloadFile } = useDownload()
+const settingsOpen = ref(false)
+
+const {
+  processingFiles,
+  completedFiles,
+  academicYear,
+  semester,
+} = storeToRefs(processorStore)
 
 function handlePreview(file) {
   processorStore.openPreview(file)
@@ -29,6 +39,15 @@ function handleFiles(files) {
     <AppHeader />
 
     <main class="max-w-7xl mx-auto p-6 space-y-6">
+      <div class="flex justify-end">
+        <button
+          @click="settingsOpen = true"
+          class="px-4 py-2 rounded-lg border"
+        >
+          ⚙️ Pengaturan Akademik
+        </button>
+      </div>
+      
       <FileDropzone @files-selected="handleFiles" />
 
       <ProcessingQueue :files="processingFiles" />
@@ -57,5 +76,18 @@ function handleFiles(files) {
         @close="processorStore.closePreview"
       />
     </main>
+    <AcademicSettingsModal
+      :open="settingsOpen"
+      :academic-year="academicYear"
+      :semester="semester"
+      @close="settingsOpen = false"
+      @save="({ academicYear, semester }) => {
+        processorStore.updateAcademicSettings(
+          academicYear,
+          semester
+        )
+        settingsOpen = false
+      }"
+    />
   </div>
 </template>

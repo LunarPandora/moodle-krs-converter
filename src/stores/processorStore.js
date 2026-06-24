@@ -8,6 +8,9 @@ export const useProcessorStore = defineStore('processor', () => {
   const completedFiles = ref([])
   const failedFiles = ref([])
 
+  const academicYear = ref('26')
+  const semester = ref('1')
+
   const { processFile } = useBatchProcessor()
 
   const previewFile = ref(null)
@@ -21,6 +24,14 @@ export const useProcessorStore = defineStore('processor', () => {
   function closePreview() {
     previewFile.value = null
     isPreviewOpen.value = false
+  }
+
+  function updateAcademicSettings(
+    year,
+    sem
+  ) {
+    academicYear.value = year
+    semester.value = sem
   }
 
   async function addFiles(files) {
@@ -41,7 +52,12 @@ export const useProcessorStore = defineStore('processor', () => {
         job.status = "processing";
 
         const startTime = Date.now();
-        const result = await processFile(job.file);
+        const result =
+          await processFile(
+            job.file,
+            academicYear.value,
+            semester.value
+          )
 
         const elapsedTime = Date.now() - startTime;
         const minimumDuration = 1200 + Math.random() * 800;
@@ -111,5 +127,10 @@ export const useProcessorStore = defineStore('processor', () => {
     isPreviewOpen,
     openPreview,
     closePreview,
+
+    academicYear,
+    semester,
+
+    updateAcademicSettings,
   }
 })

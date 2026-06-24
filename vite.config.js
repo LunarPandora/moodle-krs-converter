@@ -14,6 +14,7 @@ export default defineConfig({
     vueDevTools(),
     tailwindcss(),
   ],
+  base: '/moodle-krs-converter/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
