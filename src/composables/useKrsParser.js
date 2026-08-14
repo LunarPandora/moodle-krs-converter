@@ -59,12 +59,12 @@ export function useKrsParser() {
             lastname,
           } = splitName(nama)
 
-          const username =
-            `${firstname.replace(/\s+/g, '')}.${lastname}`
-              .toLowerCase()
+          const firstLetter = firstname.charAt(0).toLowerCase()
+          const lastnameLower = lastname.toLowerCase()
+          const nimLast2 = nim.slice(-2)
 
           const email =
-            `${username}@calvin.ac.id`
+            `${firstLetter}${lastnameLower}${nimLast2}@students.calvin.ac.id`
 
           const course1 =
             `${kodeMk}-${tahunAkademik}-${semester}`
